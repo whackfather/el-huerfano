@@ -7,22 +7,16 @@
 #include <algorithm>
 #include "utils.h"
 
-void filter(std::string& oldListFilepath, std::string& newListFilepath) {
-    // Filter original lists as provided by RRC
-
-    // Create 2D vectors from CSV
+//--------------------------------------------------------------------------------------//
+void filterCSVs(const std::string& oldListFilepath, const std::string& newListFilepath) {
     std::vector<std::vector<std::string>> table1 = readData(oldListFilepath);
     std::vector<std::vector<std::string>> table2 = readData(newListFilepath);
 
-    // Initialize data
-    int tbl1APIcol = 1;
-    int tbl2APIcol = 1;
-    std::vector<int> tbl1APIdel;
-    std::vector<int> tbl2APIdel;
-
-    std::vector<int> tbl1CountyDel;
-    std::vector<int> tbl2CountyDel;
-    std::vector<std::string> counties = {
+    const int tbl1APIcol = 1;
+    const int tbl2APIcol = 1;
+    std::vector<int> tbl1RowsToRemove;
+    std::vector<int> tbl2RowsToRemove;
+    const std::vector<std::string> targetCounties = {
         "BEE",
         "BROOKS",
         "DE WITT",
@@ -43,60 +37,59 @@ void filter(std::string& oldListFilepath, std::string& newListFilepath) {
         "ZAPATA"
     };
 
-    deleteExcessCounties(table1, counties);
-    deleteExcessCounties(table2, counties);
+    // Rewrite these functions to work with qxlsx
+    deleteExcessCounties(table1, targetCounties);
+    deleteExcessCounties(table2, targetCounties);
 
-    // Acquire list of rows to delete
+    // Identify rows with duplicate APIs
     for (unsigned int row1 = 1; row1 < table1.size(); row1++) {
         std::string apiCur1 = table1[row1][tbl1APIcol];
+
         for (unsigned int row2 = 1; row2 < table2.size(); row2++) {
             std::string apiCur2 = table2[row2][tbl2APIcol];
+
             if (apiCur1 == apiCur2) {
-                tbl1APIdel.push_back(row1);
-                tbl2APIdel.push_back(row2);
+                tbl1RowsToRemove.push_back(row1);
+                tbl2RowsToRemove.push_back(row2);
             }
         }
     }
 
-    // Delete rows from table 1
-    int bound = table1.size() - 1;
-    for (int row = bound; row >= 1; row--) {
-        if (std::find(tbl1APIdel.begin(), tbl1APIdel.end(), row) != tbl1APIdel.end()) {
-            table1.erase(table1.begin() + row);
-        }
-    }
-
-    // Delete rows from table 2
-    bound = table2.size() - 1;
-    for (int row = bound; row >= 1; row--) {
-        if (std::find(tbl2APIdel.begin(), tbl2APIdel.end(), row) != tbl2APIdel.end()) {
-            table2.erase(table2.begin() + row);
-        }
-    }
+    deleteRows(table1, tbl1RowsToRemove);
+    deleteRows(table2, tbl2RowsToRemove);
 
     writeCSV(table1, oldListFilepath);
     writeCSV(table2, newListFilepath);
 }
 
-void deleteExcessCounties(std::vector<std::vector<std::string>>& table, std::vector<std::string> counties) {
+//--------------------------------------------------------------------------------------//
+void deleteExcessCounties(std::vector<std::vector<std::string>>& table, const std::vector<std::string> counties) {
     std::vector<int> countyDelList;
 
     for (unsigned int row = 1; row < table.size(); row++) {
         int countyCol = table[row].size() - 4;
         std::string countyCur = table[row][countyCol];
+
         if (std::find(counties.begin(), counties.end(), countyCur) == counties.end()) {
             countyDelList.push_back(row);
         }
     }
 
+    deleteRows(table, countyDelList);
+}
+
+//--------------------------------------------------------------------------------------//
+void deleteRows(std::vector<std::vector<std::string>>& table, const std::vector<int> rowsToRemove) {
     int bound = table.size() - 1;
+
     for (int row = bound; row >= 1; row--) {
-        if (std::find(countyDelList.begin(), countyDelList.end(), row) != countyDelList.end()) {
+        if (std::find(rowsToRemove.begin(), rowsToRemove.end(), row) != rowsToRemove.end()) {
             table.erase(table.begin() + row);
         }
     }
 }
 
+//--------------------------------------------------------------------------------------//
 std::vector<std::vector<std::string>> readData(std::string filePath) {
     std::vector<std::vector<std::string>> data;
     std::ifstream file(filePath);
@@ -122,6 +115,7 @@ std::vector<std::vector<std::string>> readData(std::string filePath) {
     return data;
 }
 
+//--------------------------------------------------------------------------------------//
 void writeCSV(const std::vector<std::vector<std::string>>& data, const std::string& filename) {
     std::ofstream file(filename);
 
@@ -133,6 +127,7 @@ void writeCSV(const std::vector<std::vector<std::string>>& data, const std::stri
     for (const auto& row : data) {
         for (size_t i = 0; i < row.size(); ++i) {
             file << row[i];
+
             if (i < row.size() - 1) {
                 file << ",";
             }

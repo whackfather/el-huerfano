@@ -4,8 +4,9 @@
 #include <string>
 #include <vector>
 
-void filter(std::string&, std::string&);
-void deleteExcessCounties(std::vector<std::vector<std::string>>&, std::vector<std::string>);
+void filterCSVs(const std::string&, const std::string&);
+void deleteExcessCounties(std::vector<std::vector<std::string>>&, const std::vector<std::string>);
+void deleteRows(std::vector<std::vector<std::string>>&, const std::vector<int>);
 std::vector<std::vector<std::string>> readData(std::string);
 void writeCSV(const std::vector<std::vector<std::string>>&, const std::string&);
 
