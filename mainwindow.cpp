@@ -58,11 +58,11 @@ void MainWindow::on_dothething_clicked() {
 }
 
 void MainWindow::on_browseOldList_clicked() {
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Select .xlsx file"), "C:/Users", tr("CSV files (*.xlsx)"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Select .xlsx file"), "C:/Users", tr("Excel files (*.xlsx)"));
     ui->oldListTextbox->setText(fileName);
 }
 
 void MainWindow::on_browseNewList_clicked() {
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Select .xlsx file"), "C:/Users", tr("CSV files (*.xlsx)"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Select .xlsx file"), "C:/Users", tr("Excel files (*.xlsx)"));
     ui->newListTextbox->setText(fileName);
 }
