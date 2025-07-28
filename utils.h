@@ -1,13 +1,15 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#pragma once
 #include <string>
 #include <vector>
+#include "xlsxdocument.h"
+#include "xlsxcellrange.h"
+#include "xlsxchart.h"
+#include "xlsxworkbook.h"
 
-void filterCSVs(const std::string&, const std::string&);
-void deleteExcessCounties(std::vector<std::vector<std::string>>&, const std::vector<std::string>);
-void deleteRows(std::vector<std::vector<std::string>>&, const std::vector<int>);
-std::vector<std::vector<std::string>> readData(std::string);
-void writeCSV(const std::vector<std::vector<std::string>>&, const std::string&);
+QXlsx::Document* checkAPIandWrite(QXlsx::Document&, QXlsx::Document&, std::vector<int>, std::vector<int>);
+std::vector<int> getTargetCountyRows(QXlsx::Document&, const std::vector<std::string>);
 
 #endif // UTILS_H
