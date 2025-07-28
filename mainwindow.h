@@ -19,12 +19,9 @@ public:
 private slots:
     void on_dothething_clicked();
 
-
     void on_browseOldList_clicked();
 
     void on_browseNewList_clicked();
-
-    void on_pushButton_clicked();
 
 private:
     Ui::MainWindow *ui;

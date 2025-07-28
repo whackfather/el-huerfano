@@ -66,22 +66,3 @@ void MainWindow::on_browseNewList_clicked() {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Select .xlsx file"), "C:/Users", tr("CSV files (*.xlsx)"));
     ui->newListTextbox->setText(fileName);
 }
-
-void MainWindow::on_pushButton_clicked() {
-    QXlsx::Document sourceList;
-    sourceList.write(1, 1, "bruh");
-    sourceList.write(1, 2, "cruh");
-    sourceList.write(1, 3, "vruh");
-    sourceList.write(1, 4, "nruh");
-    sourceList.write(1, 5, "mruh");
-    sourceList.write(1, 6, "pruh");
-
-    QXlsx::Document output;
-
-    for (int cell = 1; cell <= sourceList.dimension().columnCount(); cell++) {
-        output.write(1, cell, sourceList.read(1, cell));
-    }
-
-    output.saveAs("output.xlsx");
-}
-
