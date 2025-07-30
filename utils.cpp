@@ -4,20 +4,20 @@
 #include <algorithm>
 #include "utils.h"
 
-QXlsx::Document* checkAPIandWrite(QXlsx::Document& sourceList, QXlsx::Document& referenceList, std::vector<int> sourceTargetRows, std::vector<int> referenceTargetRows) {
+QXlsx::Document* checkAPIandWrite(QXlsx::Document& sourceList, QXlsx::Document& referenceList, std::vector<int> sourceTargetRows, std::vector<int> referenceTargetRows, int apiColSrc, int apiColRef, bool usesHeaders) {
     QXlsx::Document* output = new QXlsx::Document;
-    int apiCol = 2;
     int recordCount = 1;
 
-    // Write column headers
-    for (int cell = 1; cell <= sourceList.dimension().columnCount(); cell++) {
-        output->write(1, cell, sourceList.read(1, cell));
+    if (usesHeaders) {
+        for (int cell = 1; cell <= sourceList.dimension().columnCount(); cell++) {
+            output->write(1, cell, sourceList.read(1, cell));
+        }
     }
 
     for (unsigned int rowIdxTable1 = 0; rowIdxTable1 < sourceTargetRows.size(); rowIdxTable1++) {
         bool record = false;
         for (unsigned int rowIdxTable2 = 0; rowIdxTable2 < referenceTargetRows.size(); rowIdxTable2++) {
-            bool matchingAPIs = sourceList.read(sourceTargetRows[rowIdxTable1], apiCol) == referenceList.read(referenceTargetRows[rowIdxTable2], apiCol);
+            bool matchingAPIs = sourceList.read(sourceTargetRows[rowIdxTable1], apiColSrc) == referenceList.read(referenceTargetRows[rowIdxTable2], apiColRef);
             if (matchingAPIs) {
                 break;
             } else if (rowIdxTable2 == referenceTargetRows.size() - 1 && !matchingAPIs) {

@@ -38,14 +38,18 @@ void MainWindow::on_dothething_clicked() {
 
     QString oldFilepath = ui->oldListTextbox->text();
     QXlsx::Document oldList(oldFilepath);
+    int apiColPrevList = ui->apiColPrevList->text().toInt();
+    bool oldUsesHeaders = ui->inclHeadersPrev->checkState();
     std::vector<int> oldListTargetRows = getTargetCountyRows(oldList, targetCounties);
 
     QString newFilepath = ui->newListTextbox->text();
     QXlsx::Document newList(newFilepath);
+    int apiColNewList = ui->apiColNewList->text().toInt();
+    bool newUsesHeaders = ui->inclHeadersNew->checkState();
     std::vector<int> newListTargetRows = getTargetCountyRows(newList, targetCounties);
 
-    QXlsx::Document* whatCameOff = checkAPIandWrite(oldList, newList, oldListTargetRows, newListTargetRows);
-    QXlsx::Document* whatCameOn = checkAPIandWrite(newList, oldList, newListTargetRows, oldListTargetRows);
+    QXlsx::Document* whatCameOff = checkAPIandWrite(oldList, newList, oldListTargetRows, newListTargetRows, apiColPrevList, apiColNewList, oldUsesHeaders);
+    QXlsx::Document* whatCameOn = checkAPIandWrite(newList, oldList, newListTargetRows, oldListTargetRows, apiColNewList, apiColPrevList, newUsesHeaders);
 
     whatCameOff->saveAs("deletions.xlsx");
     whatCameOn->saveAs("additions.xlsx");
