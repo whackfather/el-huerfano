@@ -127,38 +127,6 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QCheckBox" name="countyFilterPrev">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>160</y>
-      <width>191</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Filter out non-target counties</string>
-    </property>
-    <property name="checked">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="countyFilterNew">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>320</y>
-      <width>191</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Filter out non-target counties</string>
-    </property>
-    <property name="checked">
-     <bool>true</bool>
-    </property>
-   </widget>
    <widget class="QCheckBox" name="inclHeadersNew">
     <property name="geometry">
      <rect>
@@ -227,30 +195,88 @@
      </item>
     </layout>
    </widget>
-   <widget class="Line" name="line">
+   <widget class="QPushButton" name="browseAddLoc">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>165</y>
-      <width>181</width>
-      <height>16</height>
+      <x>700</x>
+      <y>70</y>
+      <width>71</width>
+      <height>24</height>
      </rect>
     </property>
-    <property name="orientation">
-     <enum>Qt::Orientation::Horizontal</enum>
+    <property name="text">
+     <string>Browse...</string>
     </property>
    </widget>
-   <widget class="Line" name="line_2">
+   <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>322</y>
-      <width>181</width>
-      <height>20</height>
+      <x>460</x>
+      <y>40</y>
+      <width>171</width>
+      <height>29</height>
      </rect>
     </property>
-    <property name="orientation">
-     <enum>Qt::Orientation::Horizontal</enum>
+    <property name="text">
+     <string>Additions Download Location</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="addDownloadLoc">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>70</y>
+      <width>231</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>120</y>
+      <width>171</width>
+      <height>29</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Deletions Download Location</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="delDownloadLoc">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>150</y>
+      <width>231</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="browseDelLoc">
+    <property name="geometry">
+     <rect>
+      <x>700</x>
+      <y>150</y>
+      <width>71</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Browse...</string>
     </property>
    </widget>
   </widget>

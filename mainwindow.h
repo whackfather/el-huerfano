@@ -23,6 +23,12 @@ private slots:
 
     void on_browseNewList_clicked();
 
+    void on_browseAddLoc_clicked();
+
+    void on_browseDelLoc_clicked();
+
+    bool textboxErrorCheck();
+
 private:
     Ui::MainWindow *ui;
 };

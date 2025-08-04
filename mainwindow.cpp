@@ -14,6 +14,12 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::on_dothething_clicked() {
+    if (textboxErrorCheck()) {
+        ui->statusbar->setStyleSheet("QStatusBar {color: red;}");
+        ui->statusbar->showMessage(QString("One or more text boxes are missing file locations"), 5000);
+        return;
+    }
+
     const std::vector<std::string> targetCounties = {
         "COUNTY_NAME",
         "BEE",
@@ -51,8 +57,8 @@ void MainWindow::on_dothething_clicked() {
     QXlsx::Document* whatCameOff = checkAPIandWrite(oldList, newList, oldListTargetRows, newListTargetRows, apiColPrevList, apiColNewList, oldUsesHeaders);
     QXlsx::Document* whatCameOn = checkAPIandWrite(newList, oldList, newListTargetRows, oldListTargetRows, apiColNewList, apiColPrevList, newUsesHeaders);
 
-    whatCameOff->saveAs("deletions.xlsx");
-    whatCameOn->saveAs("additions.xlsx");
+    whatCameOff->saveAs(ui->delDownloadLoc->text());
+    whatCameOn->saveAs(ui->addDownloadLoc->text());
 
     delete whatCameOff;
     delete whatCameOn;
@@ -62,7 +68,7 @@ void MainWindow::on_dothething_clicked() {
 }
 
 void MainWindow::on_browseOldList_clicked() {
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Select .xlsx file"), "C:/Users", tr("Excel files (*.xlsx)"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Select .xlsx file"), "C:/", tr("Excel files (*.xlsx)"));
     ui->oldListTextbox->setText(fileName);
 }
 
@@ -70,3 +76,33 @@ void MainWindow::on_browseNewList_clicked() {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Select .xlsx file"), "C:/Users", tr("Excel files (*.xlsx)"));
     ui->newListTextbox->setText(fileName);
 }
+
+void MainWindow::on_browseAddLoc_clicked() {
+    QString saveFileName = QFileDialog::getSaveFileName(this, tr("Save file"), "additions.xlsx", tr("Excel files (*.xlsx)"));
+    ui->addDownloadLoc->setText(saveFileName);
+}
+
+void MainWindow::on_browseDelLoc_clicked() {
+    QString saveFileName = QFileDialog::getSaveFileName(this, tr("Save file"), "deletions.xlsx", tr("Excel files (*.xlsx)"));
+    ui->delDownloadLoc->setText(saveFileName);
+}
+
+bool MainWindow::textboxErrorCheck() {
+    bool error = false;
+
+    if (ui->oldListTextbox->text().isEmpty()) {
+        error = true;
+    }
+    if (ui->newListTextbox->text().isEmpty()) {
+        error = true;
+    }
+    if (ui->addDownloadLoc->text().isEmpty()) {
+        error = true;
+    }
+    if (ui->delDownloadLoc->text().isEmpty()) {
+        error = true;
+    }
+
+    return error;
+}
+
