@@ -9,7 +9,14 @@
 #include "xlsxchart.h"
 #include "xlsxworkbook.h"
 
-QXlsx::Document* checkAPIandWrite(QXlsx::Document&, QXlsx::Document&, std::vector<int>, std::vector<int>, int, int, bool);
+struct FileInfo {
+    QXlsx::Document* document;
+    std::vector<int> targetRows;
+    int apiCol;
+    bool usesHeaders;
+};
+
+QXlsx::Document* checkAPIandWrite(FileInfo& srcFile, FileInfo& refFile);
 std::vector<int> getTargetCountyRows(QXlsx::Document&, const std::vector<std::string>);
 
 #endif // UTILS_H

@@ -4,31 +4,32 @@
 #include <algorithm>
 #include "utils.h"
 
-QXlsx::Document* checkAPIandWrite(QXlsx::Document& sourceList, QXlsx::Document& referenceList, std::vector<int> sourceTargetRows, std::vector<int> referenceTargetRows, int apiColSrc, int apiColRef, bool usesHeaders) {
+QXlsx::Document* checkAPIandWrite(FileInfo& srcFile, FileInfo& refFile) {
     QXlsx::Document* output = new QXlsx::Document;
     int recordCount = 1;
 
-    if (usesHeaders) {
-        for (int cell = 1; cell <= sourceList.dimension().columnCount(); cell++) {
-            output->write(1, cell, sourceList.read(1, cell));
+    if (srcFile.usesHeaders) {
+        for (int cell = 1; cell <= srcFile.document->dimension().columnCount(); cell++) {
+            output->write(1, cell, srcFile.document->read(1, cell));
         }
     }
 
-    for (unsigned int rowIdxTable1 = 0; rowIdxTable1 < sourceTargetRows.size(); rowIdxTable1++) {
+    for (unsigned int rowIdxTable1 = 0; rowIdxTable1 < srcFile.targetRows.size(); rowIdxTable1++) {
         bool record = false;
-        for (unsigned int rowIdxTable2 = 0; rowIdxTable2 < referenceTargetRows.size(); rowIdxTable2++) {
-            bool matchingAPIs = sourceList.read(sourceTargetRows[rowIdxTable1], apiColSrc) == referenceList.read(referenceTargetRows[rowIdxTable2], apiColRef);
-            if (matchingAPIs) {
+        for (unsigned int rowIdxTable2 = 0; rowIdxTable2 < refFile.targetRows.size(); rowIdxTable2++) {
+            QVariant sourceAPI = srcFile.document->read(srcFile.targetRows[rowIdxTable1], srcFile.apiCol);
+            QVariant referAPI = refFile.document->read(refFile.targetRows[rowIdxTable2], refFile.apiCol);
+            if (sourceAPI == referAPI) {
                 break;
-            } else if (rowIdxTable2 == referenceTargetRows.size() - 1 && !matchingAPIs) {
+            } else if (rowIdxTable2 == refFile.targetRows.size() - 1 && sourceAPI != referAPI) {
                 record = true;
                 recordCount += 1;
             }
         }
 
         if (record) {
-            for (int cell = 1; cell <= sourceList.dimension().columnCount(); cell++) {
-                output->write(recordCount, cell, sourceList.read(sourceTargetRows[rowIdxTable1], cell));
+            for (int cell = 1; cell <= srcFile.document->dimension().columnCount(); cell++) {
+                output->write(recordCount, cell, srcFile.document->read(srcFile.targetRows[rowIdxTable1], cell));
             }
         }
     }
