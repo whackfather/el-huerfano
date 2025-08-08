@@ -1,7 +1,7 @@
+#include <QFileDialog>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "utils.h"
-#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
@@ -39,28 +39,28 @@ void MainWindow::on_dothething_clicked() {
         "ZAPATA"
     };
 
-    FileInfo oldFile;
+    FileInfo* oldFile = new FileInfo;
     QXlsx::Document oldList(ui->oldListTextbox->text());
-    oldFile.document = &oldList;
-    oldFile.apiCol = ui->apiColPrevList->text().toInt();
-    oldFile.usesHeaders = ui->inclHeadersPrev->checkState();
-    oldFile.targetRows = getTargetCountyRows(*oldFile.document, targetCounties);
+    oldFile->document = &oldList;
+    oldFile->apiCol = ui->apiColPrevList->text().toInt();
+    oldFile->usesHeaders = ui->inclHeadersPrev->checkState();
+    oldFile->targetRows = getTargetCountyRows(*oldFile->document, targetCounties);
 
-    FileInfo newFile;
+    FileInfo* newFile = new FileInfo;
     QXlsx::Document newList(ui->newListTextbox->text());
-    newFile.document = &newList;
-    newFile.apiCol = ui->apiColNewList->text().toInt();
-    newFile.usesHeaders = ui->inclHeadersNew->checkState();
-    newFile.targetRows = getTargetCountyRows(*newFile.document, targetCounties);
+    newFile->document = &newList;
+    newFile->apiCol = ui->apiColNewList->text().toInt();
+    newFile->usesHeaders = ui->inclHeadersNew->checkState();
+    newFile->targetRows = getTargetCountyRows(*newFile->document, targetCounties);
 
-    QXlsx::Document* whatCameOff = checkAPIandWrite(oldFile, newFile);
-    QXlsx::Document* whatCameOn = checkAPIandWrite(newFile, oldFile);
+    QXlsx::Document* whatCameOff = checkAPIandWrite(*oldFile, *newFile);
+    QXlsx::Document* whatCameOn = checkAPIandWrite(*newFile, *oldFile);
 
     whatCameOff->saveAs(ui->delDownloadLoc->text());
     whatCameOn->saveAs(ui->addDownloadLoc->text());
 
-    delete oldFile.document;
-    delete newFile.document;
+    delete oldFile;
+    delete newFile;
     delete whatCameOff;
     delete whatCameOn;
 
